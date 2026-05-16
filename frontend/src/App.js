@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-const API = "http://localhost:8000"
+const API = "http://192.168.139.168:30800"
 
 export default function App() {
   const [photos, setPhotos]   = useState([])

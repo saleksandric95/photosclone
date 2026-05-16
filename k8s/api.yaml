@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: photosclone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/saleksandric95/photosclone-api:latest
+        env:
+        - name: DATABASE_URL
+          value: postgresql://postgres:password@db:5432/photosclone
+        - name: MINIO_URL
+          value: http://minio:9000
+        - name: MINIO_USER
+          value: minioadmin
+        - name: MINIO_PASSWORD
+          value: minioadmin
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: photosclone
+spec:
+  type: NodePort
+  selector:
+    app: api
+  ports:
+  - port: 8000
+    targetPort: 8000
+    nodePort: 30800
